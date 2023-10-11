@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokeApi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://bootswatch.com/5/morph/bootstrap.min.css">
+</head>
+<body>
+    <section class="d-flex justify-content-center mt-3">
+        <div>
+            <input type="search" id="buscar" class="form-control-sm">
+            <button type="button" class="btn btn-outline-success" value="Buscar" id="boton" onclick="">Buscar</button><br>
+        </div>
+    </section>
+    <section class="d-flex justify-content-center mt-3">
+        <div class="card" style="width: 18rem;" id="card">
+            <div class="card-header">
+                <h2 class="card-title text-center" id="titulo"></h2>
+            </div>
+            <img src="" alt="" id="pokemonImagen">
+            <div class="card-body">
+                <h6>Tipo</h6>
+                <p class="card-text" id="tipo"></p>
+                <h6>Habilidad</h6>
+                <p class="card-text" id="habilidad"></p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const input = document.querySelector("#buscar");
+        const button = document.querySelector("#boton");
+        const pokemonContainer = document.querySelector("#card");
+
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            mostrarPokemon(input.value);
+        })
+
+        function mostrarPokemon(pokemon) {
+            fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    crearPokemon(data);
+                })
+        }
+
+        function crearPokemon(pokemon) {
+            const pokemonImagen = document.querySelector('#pokemonImagen')
+            pokemonImagen.src = pokemon.sprites.front_default;
+
+            document.querySelector('#titulo').textContent = pokemon.name;
+            document.querySelector('#tipo').textContent = pokemon.types[0].type.name;
+            document.querySelector('#habilidad').textContent = pokemon.abilities[0].ability.name;
+        }
+    </script>
+</body>
+</html>
